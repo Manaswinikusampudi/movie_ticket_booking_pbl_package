@@ -1,0 +1,26 @@
+sequenceDiagram
+  actor Customer
+  participant UI as Web/Mobile UI
+  participant API as Booking API
+  participant Inv as Inventory Service
+  participant Pay as Payment Gateway
+  participant Book as Booking Service
+  participant Notify as Notification Service
+  Customer->>UI: Choose movie, theatre, show
+  UI->>API: Request show details
+  API->>Inv: Get available seats
+  Inv-->>API: Available seat map
+  API-->>UI: Display seats
+  Customer->>UI: Select seats and continue
+  UI->>API: Request seat lock
+  API->>Inv: Acquire locks with TTL
+  Inv-->>API: Lock success / failure
+  API-->>UI: Lock confirmation
+  UI->>API: Submit payment
+  API->>Pay: Create payment intent
+  Pay-->>API: Payment success
+  API->>Book: Create confirmed booking
+  Book->>Inv: Convert locks to booked seats
+  Book->>Notify: Publish ticket event
+  Notify-->>Customer: Send e-ticket
+  API-->>UI: Booking code and ticket

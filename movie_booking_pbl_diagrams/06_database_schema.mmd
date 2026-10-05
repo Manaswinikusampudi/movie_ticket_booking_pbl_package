@@ -1,0 +1,22 @@
+erDiagram
+  USERS ||--o{ BOOKINGS : places
+  MOVIES ||--o{ SHOWS : scheduled
+  THEATRES ||--|{ SCREENS : contains
+  SCREENS ||--|{ SEATS : has
+  SCREENS ||--o{ SHOWS : hosts
+  SHOWS ||--o{ SEAT_LOCKS : has
+  USERS ||--o{ SEAT_LOCKS : owns
+  BOOKINGS ||--|{ BOOKING_SEATS : contains
+  SEATS ||--o{ BOOKING_SEATS : reserved
+  SHOWS ||--o{ BOOKINGS : receives
+  BOOKINGS ||--|| PAYMENTS : has
+  USERS { uuid user_id PK string name string email UK string phone }
+  MOVIES { uuid movie_id PK string title string language int duration_min string certification }
+  THEATRES { uuid theatre_id PK string name string address }
+  SCREENS { uuid screen_id PK uuid theatre_id FK string name int capacity }
+  SEATS { uuid seat_id PK uuid screen_id FK string row_label int seat_number string seat_type }
+  SHOWS { uuid show_id PK uuid movie_id FK uuid screen_id FK datetime starts_at decimal base_price string status }
+  SEAT_LOCKS { uuid lock_id PK uuid show_id FK uuid seat_id FK uuid user_id FK datetime expires_at string status }
+  BOOKINGS { uuid booking_id PK uuid user_id FK uuid show_id FK string booking_code UK decimal total_amount string status datetime booked_at }
+  BOOKING_SEATS { uuid booking_id PK_FK uuid seat_id PK_FK decimal price }
+  PAYMENTS { uuid payment_id PK uuid booking_id FK decimal amount string status string gateway_ref UK datetime paid_at }

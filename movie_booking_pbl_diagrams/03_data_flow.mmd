@@ -1,0 +1,16 @@
+flowchart LR
+  C[Customer] -->|1. Search criteria| UI[Booking UI]
+  UI -->|2. GET movies/shows| API[Booking API]
+  API -->|3. Read catalog| CAT[(Catalog DB)]
+  API -->|4. Read availability| INV[(Inventory + Redis)]
+  INV -->|5. Show available seats| UI
+  C -->|6. Select seats| UI
+  UI -->|7. Create temporary lock| API
+  API -->|8. Atomic lock with TTL| INV
+  UI -->|9. Pay| API
+  API -->|10. Create payment intent| PAY[Payment Gateway]
+  PAY -->|11. Payment result| API
+  API -->|12. Confirm booking| BOOK[(Booking DB)]
+  BOOK -->|13. Publish event| MQ[Message Queue]
+  MQ -->|14. Ticket notification| N[Email/SMS Service]
+  N --> C

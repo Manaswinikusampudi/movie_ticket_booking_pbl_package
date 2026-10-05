@@ -1,0 +1,20 @@
+flowchart LR
+  U[Customer Web / Mobile App] --> G[API Gateway]
+  A[Admin / Theatre Portal] --> G
+  G --> AUTH[Auth & User Service]
+  G --> CAT[Movie & Theatre Catalog Service]
+  G --> SHOW[Showtime Service]
+  G --> INV[Seat Inventory Service]
+  G --> BOOK[Booking Service]
+  G --> PAY[Payment Service]
+  G --> NOTIF[Notification Service]
+  CAT --> DB[(PostgreSQL)]
+  SHOW --> DB
+  INV --> REDIS[(Redis Seat Locks)]
+  INV --> DB
+  BOOK --> DB
+  PAY --> PG[Payment Gateway]
+  BOOK --> NOTIF
+  NOTIF --> Q[Message Queue]
+  Q --> EMAIL[Email/SMS Provider]
+  G --> OBS[Logging / Metrics / Tracing]

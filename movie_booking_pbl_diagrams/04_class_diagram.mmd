@@ -1,0 +1,22 @@
+classDiagram
+  class User { +UUID userId +String name +String email +String phone +login() }
+  class Movie { +UUID movieId +String title +String language +Integer durationMin +String rating }
+  class Theatre { +UUID theatreId +String name +String address }
+  class Screen { +UUID screenId +String name +Integer capacity }
+  class Seat { +UUID seatId +String rowLabel +Integer seatNumber +SeatType type }
+  class Show { +UUID showId +DateTime startsAt +DateTime endsAt +Decimal basePrice +ShowStatus status }
+  class SeatLock { +UUID lockId +DateTime expiresAt +LockStatus status +acquire() +release() }
+  class Booking { +UUID bookingId +String bookingCode +Decimal totalAmount +BookingStatus status +confirm() +cancel() }
+  class BookingSeat { +Decimal price }
+  class Payment { +UUID paymentId +Decimal amount +PaymentStatus status +String gatewayRef }
+  User "1" --> "0..*" Booking : places
+  Movie "1" --> "0..*" Show : scheduled_as
+  Theatre "1" --> "1..*" Screen : contains
+  Screen "1" --> "1..*" Seat : has
+  Screen "1" --> "0..*" Show : hosts
+  Show "1" --> "0..*" SeatLock : locks
+  User "1" --> "0..*" SeatLock : owns
+  Booking "1" --> "1..*" BookingSeat : contains
+  BookingSeat "*" --> "1" Seat : reserves
+  Booking "1" --> "1" Payment : paid_by
+  Booking "1" --> "1" Show : for
